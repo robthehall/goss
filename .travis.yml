@@ -22,7 +22,7 @@ before_install:
 
 script:
 - make deps
-- make -j10
+- make
 
 deploy:
   provider: releases
