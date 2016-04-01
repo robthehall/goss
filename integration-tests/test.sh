@@ -14,10 +14,10 @@ for arch in amd64 386;do
     if docker ps -a | grep goss_int_test_$os;then
       docker rm -vf goss_int_test_$os
     fi
-    if [[ $os == "arch" ]]; then
-      id=$(docker run -v /run:/run:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v "$PWD/goss:/tmp/goss"  -d --name "goss_int_test_$os" "aelsabbahy/goss_$os" /sbin/init)
+    if [[ $os == "centos7" ]] || [[ $os == "arch" ]]; then
+      id=$(docker run --cap-add SYS_ADMIN -v "$PWD/goss:/goss"  -d --name "goss_int_test_$os" "aelsabbahy/goss_$os" /sbin/init)
     else
-      id=$(docker run -v "$PWD/goss:/tmp/goss"  -d --name "goss_int_test_$os" "aelsabbahy/goss_$os" /sbin/init)
+      id=$(docker run -v "$PWD/goss:/goss"  -d --name "goss_int_test_$os" "aelsabbahy/goss_$os" /sbin/init)
     fi
     ip=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' "$id")
     trap "rv=\$?; docker rm -vf $id; exit \$rv" INT TERM EXIT
@@ -26,20 +26,20 @@ for arch in amd64 386;do
     #sleep 10
   fi
 
-  out=$(docker exec goss_int_test_$os bash -c "time /tmp/goss/$os/goss-linux-$arch -g /tmp/goss/$os/goss.json validate")
+  out=$(docker exec goss_int_test_$os bash -c "time /goss/$os/goss-linux-$arch -g /goss/$os/goss.json validate")
   echo "$out"
 
   egrep -q 'Count: [0-9]{2}, Failed: 0' <<<"$out"
 
-  docker exec goss_int_test_$os bash -c "bash -x /tmp/goss/generate_goss.sh $os $arch"
+  docker exec goss_int_test_$os bash -c "bash -x /goss/generate_goss.sh $os $arch"
 
-  docker exec goss_int_test_$os bash -c "diff -wu /tmp/goss/${os}/goss-expected.json /tmp/goss/${os}/goss-generated.json"
+  docker exec goss_int_test_$os bash -c "diff -wu /goss/${os}/goss-expected.json /goss/${os}/goss-generated.json"
 
-  docker exec goss_int_test_$os bash -c "diff -wu /tmp/goss/${os}/goss-aa-expected.json /tmp/goss/${os}/goss-aa-generated.json"
+  docker exec goss_int_test_$os bash -c "diff -wu /goss/${os}/goss-aa-expected.json /goss/${os}/goss-aa-generated.json"
 
-  docker exec goss_int_test_$os bash -c "bash -x /tmp/goss/generate_goss.sh $os $arch -q"
+  docker exec goss_int_test_$os bash -c "bash -x /goss/generate_goss.sh $os $arch -q"
 
-  docker exec goss_int_test_$os bash -c "diff -wu /tmp/goss/${os}/goss-expected-q.json /tmp/goss/${os}/goss-generated.json"
+  docker exec goss_int_test_$os bash -c "diff -wu /goss/${os}/goss-expected-q.json /goss/${os}/goss-generated.json"
 
   #docker rm -vf goss_int_test_$os
 done

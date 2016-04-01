@@ -1,0 +1,68 @@
+{
+    "package": {
+        "httpd": {
+            "installed": true,
+            "versions": [
+                "2.4.6"
+            ]
+        }
+    },
+    "service": {
+        "httpd": {
+            "enabled": true,
+            "running": true
+        },
+        "autofs": {
+            "enabled": false,
+            "running": false
+        }
+    },
+    "user": {
+        "apache": {
+            "exists": true,
+            "uid": 48,
+            "gid": 48,
+            "groups": [
+                "apache"
+            ],
+            "home": "/usr/share/httpd"
+        }
+    },
+    "group": {
+        "apache": {
+            "exists": true,
+            "gid": 48
+        }
+    },
+    "command": {
+        "httpd -v": {
+            "exit-status": 0,
+            "stdout": [
+                "Server version: Apache/2.4.6 (CentOS)",
+                "Server built:   Nov 19 2015 21:43:13"
+            ],
+            "stderr": []
+        },
+        "foobar": {
+            "exit-status": 127,
+            "stdout": [],
+            "stderr": [
+                "sh: foobar: command not found"
+            ]
+        }
+    },
+    "process": {
+        "httpd": {
+            "running": true
+        }
+    },
+    "port": {
+        "tcp6:80": {
+            "listening": true,
+            "ip": ["0000:0000:0000:0000:0000:0000:0000:0000"]
+        }
+    },
+    "gossfile": {
+        "../goss-shared.json": {}
+    }
+}

@@ -20,6 +20,8 @@ done
 
 [[ $OS == "centos6" ]] && package="httpd" || package="apache2"
 [[ $OS == "centos6" ]] && user="apache" || user="www-data"
+[[ $OS == "centos7" ]] && package="httpd" || package="apache2"
+[[ $OS == "centos7" ]] && user="apache" || user="www-data"
 for x in $package foobar vim-tiny;do
   goss a "${args[@]}" package $x
 done

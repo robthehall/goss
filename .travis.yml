@@ -4,6 +4,7 @@ go:
 - 1.5.1
 
 sudo: required
+dist: trusty
 
 services:
 - docker
@@ -21,8 +22,9 @@ before_install:
 - sudo apt-get install -y upx-ucl
 
 script:
+- docker info
 - make deps
-- make
+- make centos7 arch
 
 deploy:
   provider: releases

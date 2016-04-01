@@ -1,0 +1,29 @@
+{
+    "package": {
+        "httpd": {
+            "installed": true,
+            "versions": [
+                "2.4.6"
+            ]
+        }
+    },
+    "port": {
+        "tcp6:80": {
+            "listening": true,
+            "ip": [
+                "0000:0000:0000:0000:0000:0000:0000:0000"
+            ]
+        }
+    },
+    "service": {
+        "httpd": {
+            "enabled": true,
+            "running": true
+        }
+    },
+    "process": {
+        "httpd": {
+            "running": true
+        }
+    }
+}
